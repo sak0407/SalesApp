@@ -13,6 +13,10 @@ import sel.prac.springboot.SalesApp.Service.ProductService;
 
 import java.util.List;
 
+
+
+//this is basic curd operaton with themelyf
+
 @Controller
 public class ProductController {
 
