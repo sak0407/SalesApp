@@ -1,6 +1,9 @@
 package sel.prac.springboot.SalesApp.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sel.prac.springboot.SalesApp.DAO.ProductRepository;
 import sel.prac.springboot.SalesApp.Model.Product;
@@ -15,9 +18,12 @@ public class ProductService {
     ProductRepository productRepository;
 
 
-    public List<Product> getAllProduct(){
+    public Page<Product> getAllProduct(int pageNum){
 
-        return productRepository.findAll();
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+
+        return productRepository.findAll(pageable);
     }
 
 

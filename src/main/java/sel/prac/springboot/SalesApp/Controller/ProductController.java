@@ -1,6 +1,7 @@
 package sel.prac.springboot.SalesApp.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,9 +25,18 @@ public class ProductController {
     ProductService productService;
 
     @RequestMapping("/")
-    public String veiwHomePage(Model model){
+    public String viewHomePage(Model model) {
+        return viewPage(model, 1);
+    }
 
-        List<Product> productList=productService.getAllProduct();
+    @RequestMapping("/page/{pageNum}")
+    public String viewPage(Model model,@PathVariable(value = "pageNum") int pageNum){
+
+        Page<Product> page=productService.getAllProduct(pageNum);
+        List<Product> productList=page.getContent();
+        model.addAttribute("currentPage",pageNum);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("totalItems",page.getTotalElements());
         model.addAttribute("productList",productList);
         return "index";
     }
