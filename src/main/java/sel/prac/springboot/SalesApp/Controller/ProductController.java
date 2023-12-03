@@ -2,6 +2,7 @@ package sel.prac.springboot.SalesApp.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,17 +27,32 @@ public class ProductController {
 
     @RequestMapping("/")
     public String viewHomePage(Model model) {
-        return viewPage(model, 1);
+        return viewPage(model, 1,"name","asc");
     }
+    //Hell0
 
     @RequestMapping("/page/{pageNum}")
-    public String viewPage(Model model,@PathVariable(value = "pageNum") int pageNum){
+    public String viewPage(Model model,@PathVariable(value = "pageNum") int pageNum,
+                           @Param("sortField") String sortField,
+                           @Param("sortDir") String sortDir
+                                        ){
 
-        Page<Product> page=productService.getAllProduct(pageNum);
+
+
+        System.out.println(pageNum);
+        System.out.println(sortField);
+        System.out.println(sortDir);
+
+        Page<Product> page=productService.getAllProduct(pageNum,sortField,sortDir);
         List<Product> productList=page.getContent();
         model.addAttribute("currentPage",pageNum);
         model.addAttribute("totalPages",page.getTotalPages());
         model.addAttribute("totalItems",page.getTotalElements());
+
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDir",sortDir);
+        model.addAttribute("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
+
         model.addAttribute("productList",productList);
         return "index";
     }
